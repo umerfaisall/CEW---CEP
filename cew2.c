@@ -7,13 +7,13 @@
 
 // ---------------------- SETTINGS STRUCT ----------------------
 typedef struct {
-    int scanInterval;    // seconds between scans
-    int clearDelay;      // seconds before clearing clipboard
-    int enableLogging;   // 1 = enabled, 0 = disabled
-    int maxScans;        // 0 = infinite, >0 = auto-exit after N scans
+    int scanInterval;    
+    int clearDelay;   
+    int enableLogging;  
+    int maxScans;        
 } Settings;
 
-Settings appSettings = {3, 5, 1, 10}; // default: infinite scans
+Settings appSettings = {3, 5, 1, 10}; 
 
 // ---------------------- UTILITY FUNCTIONS ----------------------
 
@@ -111,7 +111,7 @@ void clearClipboard() {
 // Banner at start
 void showBanner() {
     printf("=====================================================\n");
-    printf("        🔒 Advanced Smart Clipboard Cleaner\n");
+    printf("        Advanced Smart Clipboard Cleaner\n");
     printf("=====================================================\n");
     printf(" Scan Interval : %d sec\n", appSettings.scanInterval);
     printf(" Clear Delay   : %d sec\n", appSettings.clearDelay);
@@ -122,8 +122,8 @@ void showBanner() {
 
 // Alert when sensitive data detected
 void showDetectionAlert() {
-    printf("\n⚠ Sensitive data detected!\n");
-    printf("⏳ Clearing clipboard in %d seconds...\n", appSettings.clearDelay);
+    printf("\nSensitive data detected!\n");
+    printf(" Clearing clipboard in %d seconds...\n", appSettings.clearDelay);
 }
 
 // ---------------------- MAIN LOOP ----------------------
@@ -138,38 +138,38 @@ int main() {
         scanCount++;
 
         if (!fetchClipboard()) {
-            printf("❌ Unable to access clipboard.\n");
+            printf("Unable to access clipboard.\n");
             sleepSeconds(appSettings.scanInterval);
             continue;
         }
 
         if (!readClipboardFile(clipboard, sizeof(clipboard))) {
-            printf("❌ Failed to read clipboard.\n");
+            printf("Failed to read clipboard.\n");
             sleepSeconds(appSettings.scanInterval);
             continue;
         }
 
         if (strlen(clipboard) == 0) {
-            printf("📋 Clipboard is empty.\n");
+            printf("Clipboard is empty.\n");
             sleepSeconds(appSettings.scanInterval);
             continue;
         }
 
-        printf("📋 Clipboard content: %s\n", clipboard);
+        printf("Clipboard content: %s\n", clipboard);
 
         if (containsSensitivePattern(clipboard)) {
             showDetectionAlert();
             writeLog("Sensitive content detected in clipboard.");
             sleepSeconds(appSettings.clearDelay);
             clearClipboard();
-            printf("✅ Clipboard cleared for your safety.\n\n");
+            printf("Clipboard cleared for your safety.\n\n");
         } else {
-            printf("✔ No sensitive data detected.\n\n");
+            printf("No sensitive data detected.\n\n");
         }
 
         // Auto-exit if maxScans > 0
         if (appSettings.maxScans > 0 && scanCount >= appSettings.maxScans) {
-            printf("🔹 Max scans reached. Exiting program.\n");
+            printf("Max scans reached. Exiting program.\n");
             writeLog("Program exited after max scans.");
             break;
         }
